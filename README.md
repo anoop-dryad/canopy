@@ -1,2 +1,2 @@
 # canopy
-A simple device registry backend — CRUD over sensors and gateways with clean, structured error shapes.
+The device layer over the forest. Canopy tracks field devices — status, battery, last-seen — and serves them over a small, honest REST API.
