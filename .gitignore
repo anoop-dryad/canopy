@@ -37,4 +37,4 @@ go.work.sum
 
 
 # swagger generated — never commit, always regenerate
-infra/http/swagger/docs/
+**/swagger/docs/

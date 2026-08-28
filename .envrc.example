@@ -1,16 +1,22 @@
 # Copy to .envrc and fill in real values:  cp .envrc.example .envrc
 # .envrc is gitignored — never commit the real one.
 
-# App
+# ---------------------- App ----------------------------------
+
 export ENV=development          # development | production
 export APP_NAME=canopy
 export APP_VERSION=dev
 
-# HTTP
+# ----------------------- HTTP ---------------------------------
+
 export HTTP_ADDR=:8080
 
-# Database — REQUIRED, app panics without it.
-# SQLite (simplest for Stage 0/1):
-export DB_DSN="file:canopy.db?cache=shared&_fk=1"
-# Postgres (when you get there):
-# export DB_DSN="postgres://canopy:canopy@localhost:5432/canopy?sslmode=disable"
+# ----------------------- Database ------------------------
+
+export PGHOST=localhost
+export PGPORT=5432
+export PGUSER=postgres-user
+export PGPASSWORD=postgres-password
+export DB_NAME=db-name
+export DB_APP_USER=db-user
+export DB_APP_PASSWORD=db-password
