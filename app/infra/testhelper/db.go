@@ -63,8 +63,8 @@ func newContainerDB(t *testing.T) *sqlx.DB {
 	runMigrations(t, db)
 
 	t.Cleanup(func() {
-		db.Close()
-		container.Terminate(ctx)
+		_ = db.Close()
+		_ = container.Terminate(ctx)
 	})
 
 	return db
