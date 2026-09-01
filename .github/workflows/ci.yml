@@ -21,6 +21,11 @@ jobs:
             - name: Download deps
               run: go mod download
 
+            - name: Generating Swagger docs
+              run: |
+                  go install github.com/swaggo/swag/cmd/swag@latest
+                  swag init -g cmd/server/main.go -o infra/http/swagger/docs
+
             - name: Verify formatting
               run: |
                   if [ -n "$(gofmt -l .)" ]; then
