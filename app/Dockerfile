@@ -1,5 +1,5 @@
 # ---------- Stage 1: build ----------
-FROM golang:1.26-alpine AS builder
+FROM golang:1.27-alpine AS builder
 
 # git needed if any deps pull from git; ca-certs for HTTPS module fetches
 RUN apk add --no-cache git ca-certificates
