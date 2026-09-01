@@ -26,7 +26,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
     ./cmd/server/main.go
 
 # ---------- Stage 2: runtime ----------
-FROM alpine:3.20
+FROM alpine:3.24
 
 # ca-certificates so the app can make outbound HTTPS calls (DB TLS, APIs)
 RUN apk add --no-cache ca-certificates
