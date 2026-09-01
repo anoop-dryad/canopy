@@ -11,6 +11,8 @@ import (
 	"github.com/anoop-dryad/canopy/app/infra/http/handlers"
 	"github.com/anoop-dryad/canopy/app/infra/http/server"
 	"github.com/anoop-dryad/canopy/app/infra/logger"
+	"github.com/anoop-dryad/canopy/app/internal/repository"
+	"github.com/anoop-dryad/canopy/app/internal/service"
 	"go.uber.org/zap"
 )
 
@@ -25,11 +27,17 @@ func main() {
 
 	// ------------------------------- infrastructure ---------------------------------------
 
-	db.NewPostgresPool(cfg.DB)
+	dbPool := db.NewPostgresPool(cfg.DB)
+
+	// ------------------------------- domain ---------------------------------------
+
+	deviceSvc := service.NewService(repository.NewRepository(dbPool), appLog)
 
 	// ------------------------------- http server (blocks) ---------------------------------------
 
-	deps := handlers.Dependencies{}
+	deps := handlers.Dependencies{
+		DeviceHandler: handlers.NewDeviceHandler(deviceSvc),
+	}
 
 	srv := server.NewServer(cfg.HTTP, cfg.App, appLog, deps)
 	appLog.Info("starting server", zap.String("addr", cfg.HTTP.Addr))
