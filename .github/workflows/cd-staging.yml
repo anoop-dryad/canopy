@@ -2,7 +2,7 @@ name: CD - Staging
 
 on:
     push:
-        branches: [main]
+        branches: [dummy]
 
 permissions:
     id-token: write # required for OIDC
