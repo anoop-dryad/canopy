@@ -19,7 +19,9 @@ import (
 func main() {
 	cfg := config.Load()
 	appLog := newLogger(cfg.App)
-	defer appLog.Sync() // flush buffer before exit
+	defer func() {
+		_ = appLog.Sync() // best-effort flush; nothing actionable on shutdown
+	}()
 
 	// context cancelled on OS signal — drives graceful shutdown
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
