@@ -26,3 +26,11 @@ migrate-down:
 
 migrate-create:
 	migrate create -ext sql -dir app/migrations -seq $(name)
+
+# ----------------- docker ---------------------
+
+docker-build:
+	cd app && docker build -t canopy-backend .
+
+docker-run:
+	cd app && docker run -p 8080:8080 -e DB_DSN="$(DOCKER_DB_DSN)" canopy-backend

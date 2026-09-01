@@ -1,0 +1,9 @@
+.git
+.gitignore
+*.md
+.envrc
+.env
+*.log
+tmp/
+bin/
+infra/http/swagger/docs
