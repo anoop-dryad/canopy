@@ -20,3 +20,7 @@ export PGPASSWORD=postgres-password
 export DB_NAME=db-name
 export DB_APP_USER=db-user
 export DB_APP_PASSWORD=db-password
+
+
+# ----------------------- API KEY ------------------------
+export CANOPY_API_KEY="api key"
