@@ -1,0 +1,63 @@
+services:
+  # ---- Postgres ----
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: canopy
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-canopy_dev}
+      POSTGRES_DB: canopy
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U canopy"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---- one-shot migrations ----
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./app/migrations:/migrations
+    command:
+      [
+        "-path", "/migrations",
+        "-database", "postgres://canopy:${POSTGRES_PASSWORD:-canopy_dev}@postgres:5432/canopy?sslmode=disable",
+        "up"
+      ]
+
+  # ---- Go backend ----
+  backend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DB_DSN: "postgres://canopy:${POSTGRES_PASSWORD:-canopy_dev}@postgres:5432/canopy?sslmode=disable"
+      CANOPY_API_KEY: ${CANOPY_API_KEY}
+    ports:
+      - "8080:8080"
+
+  # ---- Python MCP server ----
+  mcp-server:
+    build:
+      context: ../agentic-ai-90day/phase4_project/stage6_deployment
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    environment:
+      BACKEND_BASE_URL: "http://backend:8080/v1"   # ← service name, not host.docker.internal
+      DEVICE_PATH: "devices"
+      CANOPY_API_KEY: ${CANOPY_API_KEY}
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
