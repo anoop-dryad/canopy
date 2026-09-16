@@ -48,7 +48,7 @@ services:
   # ---- Python MCP server ----
   mcp-server:
     build:
-      context: ../agentic-ai-90day/phase4_project/stage6_deployment
+      context: ../agentic-ai-90day/phase4_project/stage7_streamlit
       dockerfile: Dockerfile
     depends_on:
       - backend
