@@ -138,3 +138,27 @@ func (h *DeviceHandler) Delete(c *gin.Context) {
 	}
 	c.Status(http.StatusNoContent) // 204, no body
 }
+
+// @Router       /devices/{id}/downlink [post]
+func (h *DeviceHandler) Downlink(c *gin.Context) {
+	id := c.Param("id")
+	var req dto.CreateDownlinkRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		writeBadInput(c, "malformed JSON body")
+		return
+	}
+
+	if msg, ok := req.Validate(); !ok {
+		writeBadInput(c, msg)
+		return
+	}
+
+	created, err := h.svc.CreateDownlink(c.Request.Context(), id, req.Command)
+	if err != nil {
+		writeError(c, err)
+		return
+	}
+	c.JSON(http.StatusCreated, created)
+
+}

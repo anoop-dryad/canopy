@@ -81,3 +81,20 @@ func (s *Service) Delete(ctx context.Context, id string) error {
 	s.log.Info("device deleted", zap.String("id", id))
 	return nil
 }
+
+var validCommands = map[string]bool{"reset": true, "calibrate": true, "set_interval": true}
+
+func (s *Service) CreateDownlink(ctx context.Context, deviceID, command string) (models.Downlink, error) {
+	if !validCommands[command] {
+		return models.Downlink{}, apperror.ErrInvalidCommand
+	}
+	now := time.Now().UTC()
+	dl := models.Downlink{
+		ID:        "dl-" + uuid.NewString(),
+		DeviceID:  deviceID, // from the URL path
+		Command:   command,
+		Status:    models.StatusQueued, // ← SERVICE sets status, not ToDomain
+		CreatedAt: now,
+	}
+	return dl, nil
+}
