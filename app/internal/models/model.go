@@ -1,16 +1,24 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 // DeviceStatus is a constrained set — not a free string.
 // This matters: the agent's gate logic branches on status,
 // so the set of possible values must be known and finite.
 type DeviceStatus string
+type DownlinkStatus string
 
 const (
 	StatusOnline   DeviceStatus = "online"
 	StatusOffline  DeviceStatus = "offline"
 	StatusDegraded DeviceStatus = "degraded"
+)
+
+const (
+	StatusQueued DownlinkStatus = "queued"
+	StatusFailed DownlinkStatus = "failed"
 )
 
 // Device is the core resource.
@@ -28,4 +36,12 @@ type UpdateFields struct {
 	Name       *string       // nil = don't change; non-nil = set to this
 	Status     *DeviceStatus // nil = don't change
 	BatteryPct *int          // nil = don't change
+}
+
+type Downlink struct {
+	ID        string         `db:"id"         json:"id"`
+	Command   string         `db:"command"    json:"command"`
+	DeviceID  string         `db:"device_id"  json:"device_id"`
+	Status    DownlinkStatus `db:"status"     json:"status"`
+	CreatedAt time.Time      `db:"created_at" json:"created_at"`
 }

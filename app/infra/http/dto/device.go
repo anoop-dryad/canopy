@@ -89,3 +89,22 @@ func validStatus(s string) bool {
 	}
 	return false
 }
+
+// ---- inbound: create downlink ----
+type CreateDownlinkRequest struct {
+	Command string `json:"command"` // "reset", "calibrate", ...
+	// DeviceID comes from the URL path (/devices/{id}/downlink), not the body
+}
+
+func (r CreateDownlinkRequest) Validate() (string, bool) {
+	if r.Command == "" {
+		return "command is required", false
+	}
+	return "", true
+}
+
+func (r CreateDownlinkRequest) ToDomain() models.Downlink {
+	return models.Downlink{
+		Command: r.Command,
+	}
+}
