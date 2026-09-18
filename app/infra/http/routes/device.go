@@ -11,5 +11,5 @@ func Device(router *gin.RouterGroup, h *handlers.DeviceHandler) {
 	router.POST("", h.Create)
 	router.PUT("/:id", h.Update)
 	router.DELETE("/:id", h.Delete)
-	router.POST("/:id/downlink", h.Create)
+	router.POST("/:id/downlink", h.Downlink)
 }

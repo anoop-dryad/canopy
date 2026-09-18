@@ -139,6 +139,16 @@ func (h *DeviceHandler) Delete(c *gin.Context) {
 	c.Status(http.StatusNoContent) // 204, no body
 }
 
+// Create godoc
+// @Summary      Create a Downlink
+// @Description  Registers a new downlink to the device. Server assigns id and timestamps.
+// @Tags         downlinks
+// @Accept       json
+// @Produce      json
+// @Param        downlink  body    dto.CreateDownlinkRequest  true  "Downlink to create"
+// @Success      201     {object}  dto.DownlinkDTO
+// @Failure      400     {object}  ErrorResponse
+// @Failure      409     {object}  ErrorResponse
 // @Router       /devices/{id}/downlink [post]
 func (h *DeviceHandler) Downlink(c *gin.Context) {
 	id := c.Param("id")
@@ -159,6 +169,6 @@ func (h *DeviceHandler) Downlink(c *gin.Context) {
 		writeError(c, err)
 		return
 	}
-	c.JSON(http.StatusCreated, created)
+	c.JSON(http.StatusCreated, dto.ToDownlinkDTO(created))
 
 }

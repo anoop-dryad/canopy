@@ -90,6 +90,24 @@ func validStatus(s string) bool {
 	return false
 }
 
+type DownlinkDTO struct {
+	ID        string `json:"id"`
+	Command   string `json:"name"`
+	Status    string `json:"status"`
+	DeviceID  string `json:"battery_pct"`
+	CreatedAt string `json:"created_at"`
+}
+
+func ToDownlinkDTO(d models.Downlink) DownlinkDTO {
+	return DownlinkDTO{
+		ID:        d.ID,
+		DeviceID:  d.DeviceID,
+		Command:   d.Command,
+		Status:    string(d.Status),
+		CreatedAt: d.CreatedAt.Format(time.RFC3339),
+	}
+}
+
 // ---- inbound: create downlink ----
 type CreateDownlinkRequest struct {
 	Command string `json:"command"` // "reset", "calibrate", ...
@@ -101,10 +119,4 @@ func (r CreateDownlinkRequest) Validate() (string, bool) {
 		return "command is required", false
 	}
 	return "", true
-}
-
-func (r CreateDownlinkRequest) ToDomain() models.Downlink {
-	return models.Downlink{
-		Command: r.Command,
-	}
 }
