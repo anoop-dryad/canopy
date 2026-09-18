@@ -20,6 +20,7 @@ type RepositoryInterface interface {
 	Create(ctx context.Context, d models.Device) (models.Device, error)
 	Update(ctx context.Context, id string, fields models.UpdateFields) (models.Device, error)
 	Delete(ctx context.Context, id string) error
+	CreateDownlink(ctx context.Context, dl models.Downlink) (models.Downlink, error)
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -92,6 +93,17 @@ func (r *Repository) Delete(ctx context.Context, id string) error {
 		return apperror.ErrDeviceNotFound
 	}
 	return nil
+}
+
+func (r *Repository) CreateDownlink(ctx context.Context, d models.Downlink) (models.Downlink, error) {
+	_, err := r.db.ExecContext(ctx,
+		`INSERT INTO downlinks (id, command, device_id, status, created_at)
+		 VALUES ($1, $2, $3, $4, $5)`,
+		d.ID, d.Command, d.DeviceID, d.Status, d.CreatedAt)
+	if err != nil {
+		return models.Downlink{}, err // TODO: map 23505 unique violation → ErrDuplicate
+	}
+	return d, nil
 }
 
 var _ RepositoryInterface = (*Repository)(nil)

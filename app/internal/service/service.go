@@ -96,5 +96,5 @@ func (s *Service) CreateDownlink(ctx context.Context, deviceID, command string) 
 		Status:    models.StatusQueued, // ← SERVICE sets status, not ToDomain
 		CreatedAt: now,
 	}
-	return dl, nil
+	return s.repo.CreateDownlink(ctx, dl)
 }
