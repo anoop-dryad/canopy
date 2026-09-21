@@ -25,6 +25,7 @@ func NewDeviceHandler(svc *service.Service) *DeviceHandler {
 // @Success      200  {object}  map[string]interface{}  "devices and count"
 // @Failure      500  {object}  ErrorResponse
 // @Router       /devices [get]
+// @Security ApiKeyAuth
 func (h *DeviceHandler) List(c *gin.Context) {
 	devices, err := h.svc.List(c.Request.Context())
 	if err != nil {
@@ -48,6 +49,7 @@ func (h *DeviceHandler) List(c *gin.Context) {
 // @Success      200  {object}  dto.DeviceDTO
 // @Failure      404  {object}  ErrorResponse
 // @Router       /devices/{id} [get]
+// @Security ApiKeyAuth
 func (h *DeviceHandler) Get(c *gin.Context) {
 	id := c.Param("id")
 	d, err := h.svc.Get(c.Request.Context(), id)
@@ -69,6 +71,7 @@ func (h *DeviceHandler) Get(c *gin.Context) {
 // @Failure      400     {object}  ErrorResponse
 // @Failure      409     {object}  ErrorResponse
 // @Router       /devices [post]
+// @Security ApiKeyAuth
 func (h *DeviceHandler) Create(c *gin.Context) {
 	var req dto.CreateDeviceRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -100,6 +103,7 @@ func (h *DeviceHandler) Create(c *gin.Context) {
 // @Failure      400     {object}  ErrorResponse
 // @Failure      404     {object}  ErrorResponse
 // @Router       /devices/{id} [put]
+// @Security ApiKeyAuth
 func (h *DeviceHandler) Update(c *gin.Context) {
 	id := c.Param("id")
 	var req dto.UpdateDeviceRequest
@@ -130,6 +134,7 @@ func (h *DeviceHandler) Update(c *gin.Context) {
 // @Success      204  "No Content"
 // @Failure      404  {object}  ErrorResponse
 // @Router       /devices/{id} [delete]
+// @Security ApiKeyAuth
 func (h *DeviceHandler) Delete(c *gin.Context) {
 	id := c.Param("id")
 	if err := h.svc.Delete(c.Request.Context(), id); err != nil {
@@ -145,11 +150,13 @@ func (h *DeviceHandler) Delete(c *gin.Context) {
 // @Tags         downlinks
 // @Accept       json
 // @Produce      json
+// @Param		 id   path  string  true  "Device ID"
 // @Param        downlink  body    dto.CreateDownlinkRequest  true  "Downlink to create"
 // @Success      201     {object}  dto.DownlinkDTO
 // @Failure      400     {object}  ErrorResponse
 // @Failure      409     {object}  ErrorResponse
 // @Router       /devices/{id}/downlink [post]
+// @Security ApiKeyAuth
 func (h *DeviceHandler) Downlink(c *gin.Context) {
 	id := c.Param("id")
 	var req dto.CreateDownlinkRequest

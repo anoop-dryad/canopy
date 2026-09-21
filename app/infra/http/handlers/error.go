@@ -37,6 +37,12 @@ func writeError(c *gin.Context, err error) {
 			Code:  "DUPLICATE_DEVICE",
 			ID:    c.Param("id"),
 		})
+	case errors.Is(err, apperror.ErrInvalidCommand):
+		c.JSON(http.StatusConflict, ErrorResponse{
+			Error: "Invalid downlink command",
+			Code:  "INVALID_DOWNLINK_COMMAND",
+			ID:    c.Param("id"),
+		})
 	default:
 		// Never leak internal error detail to the client.
 		// Log the real err upstream (in the service); return a generic message here.

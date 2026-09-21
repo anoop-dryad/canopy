@@ -16,6 +16,11 @@ import (
 	"go.uber.org/zap"
 )
 
+// @title           Canopy API
+// @version         1.0
+// @securityDefinitions.apikey ApiKeyAuth
+// @in                         header
+// @name                       X-API-Key
 func main() {
 	cfg := config.Load()
 	appLog := newLogger(cfg.App)
