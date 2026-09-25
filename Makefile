@@ -36,4 +36,8 @@ docker-run:
 	cd app && docker run -p 8080:8080 -e DB_DSN="$(DOCKER_DB_DSN)" canopy-backend
 
 docker-compose-up:
-	docker compose up --build && docker compose up
+	docker compose up --build
+
+docker-compose-rebuild:
+	docker compose build --no-cache
+	docker compose up
